@@ -1,47 +1,70 @@
 document.addEventListener('DOMContentLoaded', () => {
     const resetBtn = document.getElementById('rstbtn');
     const turn = document.getElementById('turn-text');
-
-    let currentPlayer = 'X';
-    let gameOver = false;
-
-
-    // Initialize the players turn text
-    changePlayerText();
-
-    // Initialize the game board
     const cells = Array.from(document.querySelectorAll('.cell'));
-    let cellIndex = 0;
-    cells.forEach(cell => {
-
-        // cell.textContent = cellIndex;
-
-        // Set the cell's border based on its position in the grid
-        cell.style.borderRight = cellIndex % 3 !== 2 ? '2px solid black' : 'none';
-        cell.style.borderBottom = cellIndex < 6 ? '2px solid black' : 'none';
-        cellIndex++;
-
-        cell.addEventListener('click', () => {
-            if (!gameOver && !cell.textContent) {
-                cell.textContent = currentPlayer;
-                cell.style.color = getCurrentPlayerColor();
-                if (findWinningCells() != null) {
-                    gameEnded(0);
-                } else if (checkDraw()) {
-                    gameEnded(1);
-                } else {
-                    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-                    changePlayerText();
-                }
-            }
-        });
-    });
+    const gameStats = Array.from(document.querySelectorAll('.game-stats-item'));
     
+    let currentPlayer = 'X';
+    let gameOver = false;   
+    
+    let gameCount=0;
+    let xWins=0;
+    let oWins=0;
+    let draws=0;
+    
+    initStrings();
+    
+    // Initialize the game board
+    function initGame(){
+        let cellIndex = 0;
+        cells.forEach(cell => {
+
+            // cell.textContent = cellIndex;
+
+            // Set the cell's border based on its position in the grid
+            cell.style.borderRight = cellIndex % 3 !== 2 ? '2px solid black' : 'none';
+            cell.style.borderBottom = cellIndex < 6 ? '2px solid black' : 'none';
+            cellIndex++;
+
+            cell.addEventListener('click', () => {
+                if (!gameOver && !cell.textContent) {
+                    cell.textContent = currentPlayer;
+                    cell.style.color = getCurrentPlayerColor();
+                    if (findWinningCells() != null) {
+                        gameEnded(0);
+                    } else if (checkDraw()) {
+                        gameEnded(1);
+                    } else {
+                        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                        changePlayerText();
+                    }
+                }
+            });
+        });
+    }
+
     // Initialize the reset button
     resetBtn.addEventListener('click', () => {
         resetGame();
     });
 
+    function initStrings(){
+        // Initialize the players turn text
+        changePlayerText();
+
+        // Initialiaze game stats text
+        updateGameStats();
+    }
+
+    // Update game stats text
+    function updateGameStats() {
+        updateLocalCookie();
+        gameStats[0].textContent = gameCount;
+        gameStats[1].textContent = xWins;
+        gameStats[2].textContent = oWins;
+        gameStats[3].textContent = draws;
+    }
+    
     // Update the player's turn text
     function changePlayerText() {
         turn.textContent = 'Player\'s turn: ' + currentPlayer;
@@ -113,18 +136,49 @@ document.addEventListener('DOMContentLoaded', () => {
         context.closePath();
         context.stroke();
     }
+    // get the cookie values for the game stats
+    function updateLocalCookie() {
+        const cookie = document.cookie;
+        const cookieArray = cookie.split(';');
+        const cookieObj = {};
+        cookieArray.forEach(entry => {
+            let [key, value] = entry.split('=');
+            cookieObj[key.trim()] = value;
+        });
+
+        gameCount = parseInt(cookieObj.gameCount) || 0;
+        xWins = parseInt(cookieObj.xWins) || 0;
+        oWins = parseInt(cookieObj.oWins) || 0;
+        draws = parseInt(cookieObj.draws) || 0;
+    }
+
+    // Function to create a cookie 
+    function updateCookieStats() {
+        document.cookie = `gameCount=${gameCount}; expires=Fri, 31 Dec 9999 23:59:59 GMT;`;
+        document.cookie = `xWins=${xWins}; expires=Fri, 31 Dec 9999 23:59:59 GMT;`;
+        document.cookie = `oWins=${oWins}; expires=Fri, 31 Dec 9999 23:59:59 GMT;`;
+        document.cookie = `draws=${draws}; expires=Fri, 31 Dec 9999 23:59:59 GMT;`;
+    }
 
     // Function that ends the game and displays the winner, the confetti and block the cells, via other functions
     function gameEnded(aftermath) {
         if (aftermath === 0) {
             turn.textContent = currentPlayer + ' wins!';
+            gameCount++;
+            if (currentPlayer === 'X')
+                xWins++;
+            else
+                oWins++;
             drawWinningLine(findWinningCells());
             startAnimation();
         } else if (aftermath === 1) {
             turn.textContent = 'Its a Draw!';
+            draws++;
         }
-        gameOver = true;
+        updateCookieStats();
+        updateGameStats();
         unclickableCells();
+        gameOver = true;
     }
 
     // Function to reset the game after it ends
@@ -147,6 +201,5 @@ document.addEventListener('DOMContentLoaded', () => {
         changePlayerText();
         stopAnimation();
     }
+    initGame();
 });
-
-
