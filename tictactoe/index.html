@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe - by dd</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas class="canvas" id="confetti-canvas"></canvas>
+    <canvas class="canvas" id="line-canvas"></canvas>  
+
+    <div class="title">TicTacToe</div>
+    <div class="turn-text" id="turn-text">Player's Turn: <div class="player">...</div></div>
+
+    <div id="board" class="board">
+        <div class="cell" id="0"></div>
+        <div class="cell" id="1"></div>
+        <div class="cell" id="2"></div>
+        <div class="cell" id="3"></div>
+        <div class="cell" id="4"></div>
+        <div class="cell" id="5"></div>
+        <div class="cell" id="6"></div>
+        <div class="cell" id="7"></div>
+        <div class="cell" id="8"></div>
+    </div>
+    <div class="game-stats-text" id="stats-text">GAME STATS <br/>
+        Games Played: <span  class="game-stats-item" id="game-count">...</span> <br/>
+        X Wins: <span class="game-stats-item" id="x-wins">...</span> <br/>
+        O Wins: <span class="game-stats-item" id="o-wins">...</span> <br/>
+        Draws:  <span class="game-stats-item" id="draws">...</span>  <br/>
+    </div>
+
+
+    <div class="rstbtn" id="rstbtn">RESET</div> 
+    <script src="gameManager.js"></script>
+    <script src="confetti.js"></script>
+</body>
+</html>
