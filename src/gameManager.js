@@ -12,10 +12,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let oWins = 0;
     let draws = 0;
     
-    initStrings();
     
     // Initialize the game board
     function initGame(){
+        initStrings();
+        
         let cellIndex = 0;
         cells.forEach(cell => {
 
