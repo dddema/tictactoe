@@ -12,14 +12,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let oWins = 0;
     let draws = 0;
     
-    
     // Initialize the game board
     function initGame(){
         initStrings();
-        
+
         let cellIndex = 0;
         cells.forEach(cell => {
-
             // cell.textContent = cellIndex;
 
             // Set the cell's border based on its position in the grid
@@ -32,9 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     cell.textContent = currentPlayer;
                     cell.style.color = getCurrentPlayerColor();
                     if (findWinningCells() != null) {
-                        gameEnded(0);
+                        gameWon();
                     } else if (checkDraw()) {
-                        gameEnded(1);
+                        gameDraw();
                     } else {
                         currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
                         changePlayerText();
@@ -99,6 +97,12 @@ document.addEventListener('DOMContentLoaded', () => {
             cell.style.pointerEvents = 'none';
         });
     }
+
+    // Event Handler function for line resizing
+    function redrawLine() {
+        drawWinningLine(findWinningCells());
+    }
+
     // Function to draw the winning line on the canvas
     function drawWinningLine(winningCells) {
         const [index1, index2, index3] = winningCells;
@@ -120,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
         context.beginPath();
         context.moveTo(x1, y1);
         context.lineTo(x3, y3);
-        context.lineWidth = 5;
+        context.lineWidth = '2vh';
         context.strokeStyle = getCurrentPlayerColor();
         context.closePath();
         context.stroke();
@@ -149,21 +153,31 @@ document.addEventListener('DOMContentLoaded', () => {
         document.cookie = `draws=${draws}; expires=Fri, 31 Dec 9999 23:59:59 GMT;`;
     }
 
-    // Function that ends the game and displays the winner, the confetti and block the cells, via other functions
-    function gameEnded(aftermath) {
-        if (aftermath === 0) {
-            turnText.textContent = currentPlayer + ' wins!';
-            gameCount++;
-            if (currentPlayer === 'X')
-                xWins++;
-            else
-                oWins++;
-            drawWinningLine(findWinningCells());
-            startAnimation();
-        } else if (aftermath === 1) {
-            turnText.textContent = 'Its a Draw!';
-            draws++;
-        }
+    // Ending function for when a player wins, it also draws the winning line and starts the confetti animation 
+    function gameWon(){
+        turnText.textContent = currentPlayer + ' wins!';
+        if (currentPlayer === 'X')
+            xWins++;
+        else
+            oWins++;
+        drawWinningLine(findWinningCells());
+        // add event listener to redraw the line if the window get resized
+        window.addEventListener('resize', redrawLine);
+
+        startAnimation();
+        gameEnd();
+    }
+
+    // Ending function for when a draw happens
+    function gameDraw(){
+        turnText.textContent = 'Its a Draw!';
+        draws++;
+        gameEnd();
+    }
+
+    // Function that ends the game, updating cookies, stats and making the cells unclickable
+    function gameEnd() {   
+        gameCount++;
         updateCookieStats();
         updateGameStats();
         unclickableCells();
@@ -172,18 +186,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to reset the game after it ends
     function resetGame() {
+        // Resets the cells to empty and makes them clickable
         cells.forEach(cell => {
             cell.textContent = null;
             cell.style.textColor = 'black';
-        });
-
-        cells.forEach(cell => {
             cell.style.pointerEvents = 'auto';
         });
 
+        // clears the line drawn on the canvas after a win
         const canvas = document.getElementById('line-canvas');
         const context = canvas.getContext('2d');
         context.clearRect(0, 0, canvas.width, canvas.height);
+        // remove event listener for the window resize
+        window.removeEventListener('resize', redrawLine);
+
 
         gameOver = false;
         currentPlayer = 'X';

@@ -1,3 +1,8 @@
+:root {
+    --main-bg-color: #f8f9fa;
+    --grid-size: 15vh;
+}
+
 body{
     font-family: Arial, Helvetica, sans-serif;
     display: flex;
@@ -10,6 +15,7 @@ body{
     -moz-user-select: none;     /* Firefox */
     -ms-user-select: none;      /* IE 10+ */
     user-select: none;     
+    background-color: var(--main-bg-color);
 }
 
 .canvas {
@@ -31,7 +37,7 @@ body{
 
 #turn-text {
     font-size: 4vh;
-    margin-bottom: 20px;
+    margin-bottom: 2vh;
     border-bottom: 2px solid black;
 }
 
@@ -42,13 +48,14 @@ body{
 
 #board {
     display: grid;
-    grid-template-columns: repeat(3, 15vh);
-    grid-template-rows: repeat(3, 15vh);
+    grid-template-columns: repeat(3, var(--grid-size));
+    grid-template-rows: repeat(3, var(--grid-size));
+    margin: 2vh 2vw;
 }
 
 .cell {
-    width: 15vh;
-    height: 15vh;
+    width: var(--grid-size);
+    height: var(--grid-size);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -71,4 +78,44 @@ body{
 
 #resetbtn:hover {
     background-color: #f0f0f0;
+}
+
+.inlinerow {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-history-container{
+}
+
+.side-items {
+    width: 25vw;
+    margin: 5;
+    top: 0;
+    text-align: center;
+    background-color: red;
+    padding: 1vh;
+}
+
+#game-stats {
+    /* display: flex;
+    flex-direction: column; */
+    align-items: center;
+}
+
+#game-stats-title {
+    font-size: 4vh;
+}
+
+#game-stats-item {
+    font-size: 2vh;;
+    margin-top: 1vh;
+}
+
+#game-stats p {
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 0;
 }
