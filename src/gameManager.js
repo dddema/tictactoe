@@ -1,17 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const resetBtn = document.getElementById('resetbtn');
+    const resetBtn = document.getElementById('reset-btn');
     const turnText = document.getElementById('turn-text');
     const cells = Array.from(document.querySelectorAll('.cell'));
-    const gameStats = Array.from(document.querySelectorAll('.game-stats-item'));
+    const gameStats = Array.from(document.querySelectorAll('.game-stats-item-text'));
+    const catModeBtn = document.getElementById('cat-mode-btn');
     
-    let currentPlayer = 'X';
-    let gameOver = false;   
-    
+    let playerOneSymbol = 'X';
+    let playerTwoSymbol = 'O';
+    let currentPlayer = playerOneSymbol;
+    let gameOver = false;  
+
     let gameCount = 0;
     let xWins = 0;
     let oWins = 0;
     let draws = 0;
-    
+
     // Initialize the game board
     function initGame(){
         initStrings();
@@ -34,18 +37,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else if (checkDraw()) {
                         gameDraw();
                     } else {
-                        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                        currentPlayer = currentPlayer === playerOneSymbol ? playerTwoSymbol : playerOneSymbol;
                         changePlayerText();
                     }
                 }
             });
         });
-    }
+    
+        // Initialize the reset button
+        resetBtn.addEventListener('click', () => {
+            resetGame();
+        });
 
-    // Initialize the reset button
-    resetBtn.addEventListener('click', () => {
-        resetGame();
-    });
+        catModeBtn.addEventListener('click', () => {
+            switchCatMode();
+        });
+    }
 
     function initStrings(){
         // Initialize the players turn text
@@ -71,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to get the current player's color
     function getCurrentPlayerColor() {
-        return currentPlayer === 'X' ? 'blue' : 'red';
+        return currentPlayer === playerOneSymbol ? 'blue' : 'red';
     }
 
     // Function to find the winning cells
@@ -129,6 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
         context.closePath();
         context.stroke();
     }
+    
     // get the cookie values for the game stats
     function updateLocalCookie() {
         const cookie = document.cookie;
@@ -156,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Ending function for when a player wins, it also draws the winning line and starts the confetti animation 
     function gameWon(){
         turnText.textContent = currentPlayer + ' wins!';
-        if (currentPlayer === 'X')
+        if (currentPlayer === playerOneSymbol)
             xWins++;
         else
             oWins++;
@@ -202,9 +210,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         gameOver = false;
-        currentPlayer = 'X';
+        currentPlayer = playerOneSymbol;
         changePlayerText();
         stopAnimation();
     }
+
+    function switchCatMode(){
+        if (catModeBtn.textContent === 'CAT MODE'){
+            catModeBtn.textContent = 'NORMAL MODE';
+            playerOneSymbol = '😼';
+            playerTwoSymbol = '🐶';
+        } else {
+            catModeBtn.textContent = 'CAT MODE';
+            playerOneSymbol = 'X';
+            playerTwoSymbol = 'O';
+        }
+        resetGame();
+    }
+
     initGame();
 });

@@ -67,16 +67,28 @@ body{
     background-color: #f0f0f0;
 }
 
-#resetbtn {
+#reset-btn {
     margin-top: 3vh;
-    margin-bottom: 15px;
+
     padding: 2vh 3vw;
     font-size: 3vh;
     cursor: pointer;
     border: 2px solid black;
 }
 
-#resetbtn:hover {
+#reset-btn:hover {
+    background-color: #f0f0f0;
+}
+
+#cat-mode-btn {
+    margin-top: 1vh;
+    padding: 1vh 1vw;
+    font-size: 3vh;
+    cursor: pointer;
+    border: 2px solid black;
+}
+
+#cat-mode-btn:hover {
     background-color: #f0f0f0;
 }
 
@@ -91,11 +103,11 @@ body{
 }
 
 .side-items {
-    width: 25vw;
+    width: 20vw;
     margin: 5;
     top: 0;
     text-align: center;
-    background-color: red;
+    /* background-color: red; */
     padding: 1vh;
 }
 
@@ -106,11 +118,11 @@ body{
 }
 
 #game-stats-title {
-    font-size: 4vh;
+    font-size: 1.5em;
 }
 
 #game-stats-item {
-    font-size: 2vh;;
+    font-size: 0.1em;
     margin-top: 1vh;
 }
 
@@ -119,3 +131,5 @@ body{
     margin-top: 5px;
     margin-bottom: 0;
 }
+
+
