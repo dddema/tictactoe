@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let playerOneSymbol = 'X';
     let playerTwoSymbol = 'O';
+    let playerOneColor = 'blue';
+    let playerTwoColor = 'red';
     let currentPlayer = playerOneSymbol;
     let gameOver = false;  
 
@@ -78,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to get the current player's color
     function getCurrentPlayerColor() {
-        return currentPlayer === playerOneSymbol ? 'blue' : 'red';
+        return currentPlayer === playerOneSymbol ? playerOneColor : playerTwoColor;
     }
 
     // Function to find the winning cells
@@ -131,7 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
         context.beginPath();
         context.moveTo(x1, y1);
         context.lineTo(x3, y3);
-        context.lineWidth = '2vh';
+        
+        context.lineWidth = '4';
         context.strokeStyle = getCurrentPlayerColor();
         context.closePath();
         context.stroke();
@@ -220,10 +223,14 @@ document.addEventListener('DOMContentLoaded', () => {
             catModeBtn.textContent = 'NORMAL MODE';
             playerOneSymbol = '😼';
             playerTwoSymbol = '🐶';
+            playerOneColor = '#DBAD2F';
+            playerTwoColor = '#995C05';
         } else {
             catModeBtn.textContent = 'CAT MODE';
             playerOneSymbol = 'X';
             playerTwoSymbol = 'O';
+            playerOneColor = 'blue';
+            playerTwoColor = 'red';
         }
         resetGame();
     }
